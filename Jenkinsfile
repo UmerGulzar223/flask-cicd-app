@@ -29,8 +29,15 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    sh 'docker build -t flask-app .'
-                    sh 'docker run -d -p 5000:5000 flask-app'
+                    // Clean up old container if exists
+                    sh '''
+                    docker ps -q --filter "ancestor=flask-app" | xargs -r docker stop
+                    docker ps -a -q --filter "ancestor=flask-app" | xargs -r docker rm
+                    docker rm -f flask-app || true
+                    '''
+
+                    // Run new container
+                    sh 'docker run -d -p 5000:5000 --name flask-app flask-app'
                 }
             }
         }

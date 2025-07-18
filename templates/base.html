@@ -2,23 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>My Portfolio</title>
+    <title>{% block title %}Muhammad Umer - DevOps Engineer{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <header>
-        <h1>My Portfolio</h1>
+        <h1>Muhammad Umer</h1>
+        <h2>DevOps Engineer</h2>
         <nav>
             <a href="/">Home</a> |
             <a href="/about">About</a> |
-            <a href="/projects">Projects</a>
+            <a href="/projects">Projects</a> |
+            <a href="/skills">Skills</a> |
+            <a href="/experience">Experience</a> |
+            <a href="/contact">Contact</a>
         </nav>
     </header>
-    <main>
-        {% block content %}{% endblock %}
-    </main>
-    <footer>
-        <p>© 2025 My Portfolio</p>
-    </footer>
+    <main>{% block content %}{% endblock %}</main>
+    <footer><p>&copy; 2025 Muhammad Umer</p></footer>
 </body>
 </html>

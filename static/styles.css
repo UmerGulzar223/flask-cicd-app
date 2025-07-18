@@ -1,28 +1,5 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-}
-
-header {
-    background: #333;
-    color: white;
-    padding: 1em;
-    text-align: center;
-}
-
-nav a {
-    color: #ddd;
-    margin: 0 10px;
-    text-decoration: none;
-}
-
-main {
-    padding: 2em;
-}
-
-footer {
-    text-align: center;
-    padding: 1em;
-    background: #f4f4f4;
-}
+body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f4f4f4; }
+header { background: #333; color: white; padding: 1rem; text-align: center; }
+nav a { color: #ddd; margin: 0 10px; text-decoration: none; }
+main { padding: 2rem; background: white; margin: 1rem auto; max-width: 900px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+footer { text-align: center; padding: 1rem; background: #eee; }

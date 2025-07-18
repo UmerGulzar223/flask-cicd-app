@@ -29,14 +29,16 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Clean up old container if exists
+                    // Stop any container using port 5000
                     sh '''
-                    docker ps -q --filter "ancestor=flask-app" | xargs -r docker stop
-                    docker ps -a -q --filter "ancestor=flask-app" | xargs -r docker rm
-                    docker rm -f flask-app || true
+                    CONTAINER_ID=$(docker ps --filter "publish=5000" --format "{{.ID}}")
+                    if [ ! -z "$CONTAINER_ID" ]; then
+                    docker stop $CONTAINER_ID
+                    docker rm $CONTAINER_ID
+                    fi
                     '''
 
-                    // Run new container
+                    // Now run the container
                     sh 'docker run -d -p 5000:5000 --name flask-app flask-app'
                 }
             }

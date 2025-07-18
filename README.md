@@ -17,3 +17,29 @@ This is a personal portfolio website built using **Flask**, showcasing Muhammad 
 
 ## 📂 Project Structure
 
+flask-cicd-app/
+├── app.py # Main Flask app
+├── requirements.txt # Python dependencies
+├── Dockerfile # Docker image instructions
+├── Jenkinsfile # Jenkins declarative pipeline
+├── test_app.py # Pytest unit test
+├── static/
+│ └── styles.css # Custom styles
+└── templates/
+├── base.html # Layout template
+├── index.html # Home page
+├── about.html # About me
+├── projects.html # Portfolio projects
+├── skills.html # Skills listing
+├── experience.html # Work experience
+└── contact.html # Contact info
+
+---
+
+## 📦 Getting Started
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/UmerGulzar223/flask-cicd-app.git
+cd flask-cicd-app

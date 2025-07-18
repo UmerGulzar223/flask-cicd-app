@@ -4,10 +4,6 @@ This is a personal portfolio website built using **Flask**, showcasing Muhammad 
 
 ---
 
-## 🌐 Live Preview
-
-> Hosted on: `http://<your-server-ip>:5000`
-
 ---
 
 ## 🧰 Tech Stack

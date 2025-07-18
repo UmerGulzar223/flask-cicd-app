@@ -29,20 +29,21 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Stop any container using port 5000
                     sh '''
-                    CONTAINER_ID=$(docker ps --filter "publish=5000" --format "{{.ID}}")
-                    if [ ! -z "$CONTAINER_ID" ]; then
-                    docker stop $CONTAINER_ID
-                    docker rm $CONTAINER_ID
-                    fi
-                    '''
+                    echo "🧹 Cleaning old container..."
+                    docker ps --format '{{.ID}} {{.Ports}}' | grep '0.0.0.0:5000' | awk '{print $1}' | xargs -r docker stop
+                    docker rm -f flask-app || true
 
-                    // Now run the container
-                    sh 'docker run -d -p 5000:5000 --name flask-app flask-app'
+                    echo "⚙️  Building fresh image (no cache)..."
+                    docker build --no-cache -t flask-app .
+
+                    echo "🚀 Deploying new container..."
+                    docker run -d -p 5000:5000 --name flask-app flask-app
+                    '''
                 }
             }
         }
+
     }
 
     post {

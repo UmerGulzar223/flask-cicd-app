@@ -26,5 +26,10 @@ def experience():
 def contact():
     return render_template("contact.html")
 
+@app.context_processor
+def inject_version():
+    return dict(build_version="v1.0.2")  # manually or dynamically updated
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

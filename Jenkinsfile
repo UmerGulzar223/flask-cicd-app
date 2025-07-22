@@ -2,27 +2,39 @@ pipeline {
     agent any
 
     environment {
-        SONAR_TOKEN = credentials('sonar-token') // Jenkins secret text
+        VENV_DIR = 'venv'
+        SONAR_TOKEN = credentials('sonar-token')
     }
 
     stages {
-        stage('Install Dependencies') {
+        stage('Setup Python venv') {
             steps {
-                sh 'pip install flake8 pytest'
+                sh '''
+                python3 -m venv ${VENV_DIR}
+                . ${VENV_DIR}/bin/activate
+                pip install --upgrade pip
+                pip install flake8 pytest
+                '''
             }
         }
 
         stage('Lint & Unit Tests') {
             steps {
-                sh 'flake8 . --exit-zero'
-                sh 'pytest || true'
+                sh '''
+                . ${VENV_DIR}/bin/activate
+                flake8 . --exit-zero
+                pytest || true
+                '''
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('MySonarQube') {
-                    sh 'sonar-scanner'
+                withSonarQubeEnv('Sonar') {
+                    sh '''
+                    . ${VENV_DIR}/bin/activate
+                    sonar-scanner
+                    '''
                 }
             }
         }

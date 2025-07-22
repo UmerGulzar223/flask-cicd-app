@@ -1,55 +1,51 @@
 pipeline {
     agent any
 
-    environment {
-        VENV_DIR = 'venv'
-        SONAR_TOKEN = credentials('sonar-token')
-    }
-
     stages {
-        stage('Setup Python venv') {
+        stage('Clone') {
             steps {
-                sh '''
-                python3 -m venv ${VENV_DIR}
-                . ${VENV_DIR}/bin/activate
-                pip install --upgrade pip
-                pip install flake8 pytest
-                '''
-            }
-        }
-
-        stage('Lint & Unit Tests') {
-            steps {
-                sh '''
-                . ${VENV_DIR}/bin/activate
-                flake8 . --exit-zero
-                pytest || true
-                '''
+                git 'https://github.com/yourusername/flask-cicd-app.git'
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('Sonar') {
-                    sh '''
-                    . ${VENV_DIR}/bin/activate
-                    sonar-scanner
-                    '''
+                    sh 'sonar-scanner'
                 }
             }
         }
 
-        stage('Docker Build') {
+        stage('Install Dependencies') {
             steps {
-                sh 'docker build -t flask-cicd-app .'
+                sh 'python3 -m venv venv'
+                sh './venv/bin/pip install -r requirements.txt'
             }
         }
 
-        stage('Deploy via Docker Compose') {
+        stage('Test') {
             steps {
-                sh 'docker-compose down || true'
-                sh 'docker-compose up -d --build'
+                sh './venv/bin/pytest test_app.py'
             }
+        }
+
+        stage('Docker Build & Deploy') {
+            steps {
+                sh '''
+                docker rm -f flask-app || true
+                docker build --no-cache -t flask-app .
+                docker run -d -p 5000:5000 --name flask-app flask-app
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '🎉 CI/CD pipeline completed with SonarQube + Docker'
+        }
+        failure {
+            echo '❌ Build failed. Check SonarQube or Test reports.'
         }
     }
 }

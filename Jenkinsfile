@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+        environment {
+        PATH = "/opt/sonar-scanner/bin:$PATH"
+    }
+
     stages {
         stage('Clone') {
             steps {
@@ -11,7 +15,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('Sonar') {
-                    sh 'sonar-scanner'
+                    sh 'sonar-scanner -Dsonar.projectKey=jenkins-sonar-project -Dsonar.sources=.'
                 }
             }
         }

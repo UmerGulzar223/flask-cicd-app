@@ -43,15 +43,6 @@ pipeline {
             }
         }
 
-        stage('Start Monitoring Stack') {
-            steps {
-                dir('monitoring') {
-                    sh 'docker compose down || true'  // Stop any old containers
-                    sh 'docker compose up -d'        // Start Prometheus + Grafana
-                }
-            }
-        }
-
     }
 
     post {
